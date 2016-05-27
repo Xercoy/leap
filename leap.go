@@ -1,7 +1,7 @@
 package leap
 
 import (
-	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 )
@@ -21,13 +21,13 @@ func init() {
 	_, err = os.Stat(cfgFullPath)
 
 	if os.IsNotExist(err) == false {
-		fmt.Println("Config file already exists.")
+		log.Println("Config file already exists.")
 
 		return
 	}
 
 	if os.IsNotExist(err) {
-		fmt.Println("File doesn't exist. Creating...")
+		log.Println("File doesn't exist. Creating...")
 
 		file, err := os.OpenFile(cfgFullPath, os.O_CREATE|os.O_RDWR, 0755)
 		defer file.Close()
@@ -35,7 +35,7 @@ func init() {
 			panic(err.Error())
 		}
 
-		fmt.Println("File successfully created.")
+		log.Println("File successfully created.")
 	}
 
 	_, err = os.Stat(cfgFullPath)

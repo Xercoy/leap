@@ -1,6 +1,6 @@
 # LEAP
 
-A clone of hop made in Go, made for linux. Keeps a hidden file in your home directory called .leap to keep track of all of the places that you can hop to.
+A clone of hop in Go, made for linux. Keeps a hidden file in your home directory called .leap to keep track of all of the places that you can hop to.
 
 # Usage
 
@@ -14,7 +14,7 @@ List all of the places you can leap to:
 leap list
 ```
 
-Leap:
+Leap to somewhere via the alias you created:
 ```
 leap home
 ```
