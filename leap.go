@@ -13,7 +13,7 @@ const (
 
 // +build !testing
 func init() {
-	cfgFullPath, err := filepath.Abs(cfgFilePath + cfgFileName)
+	cfgFullPath, err := filepath.Abs(filepath.Join(GetHomeDir(), cfgFileName))
 	if err != nil {
 		panic(err.Error())
 	}
@@ -29,7 +29,7 @@ func init() {
 	if os.IsNotExist(err) {
 		fmt.Println("File doesn't exist. Creating...")
 
-		file, err := os.OpenFile(cfgFullPath, os.O_CREATE, 0777)
+		file, err := os.OpenFile(cfgFullPath, os.O_CREATE|os.O_RDWR, 0755)
 		defer file.Close()
 		if err != nil {
 			panic(err.Error())
@@ -43,4 +43,9 @@ func init() {
 	if err != nil && (os.IsNotExist(err) != false) {
 		panic(err.Error())
 	}
+}
+
+// Execute the unix cmd echo $HOME and return it as a string.
+func GetHomeDir() string {
+	return os.Getenv("HOME")
 }
