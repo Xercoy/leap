@@ -15,12 +15,17 @@ var (
 	defaultLeapConfig *LeapConfig
 )
 
+type Place struct {
+	Directory string
+	Alias     string
+}
+
 // Struct to hold a pointer to the config file.
 type LeapConfig struct {
 	File       *os.File
 	content    map[string]string
 	configPath string
-	Places     []Entry
+	Places     []Place
 }
 
 func NewLeapConfig(cfgFullPath string) *LeapConfig {
@@ -79,7 +84,7 @@ func GetTempDir() string {
 	return os.TempDir()
 }
 
-func (lC *LeapConfig) readConfigFile() ([]Entry, error) {
+func (lC *LeapConfig) readConfigFile() ([]Place, error) {
 	return decodeJSON(lC.configPath)
 }
 
@@ -97,10 +102,10 @@ func (lC *LeapConfig) AddPlace(dir string, alias string) error {
 
 	log.Printf("lC.Places after updating: %v", lC.Places)
 
-	newEntry := Entry{dir, alias}
+	newPlace := Place{dir, alias}
 
 	// Add the new path to the Place slice.
-	lC.Places = append(lC.Places, newEntry)
+	lC.Places = append(lC.Places, newPlace)
 
 	// Write the updated Config file
 	err = lC.writeToFile()

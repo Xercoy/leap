@@ -30,7 +30,7 @@ func encodeJSON(filePath string, content interface{}) error {
 	}
 
 	/*
-		var e []Entry
+		var e []Place
 		byteContent, err := json.Marshal(content)
 		err = json.Unmarshal(byteContent, &e)
 		if err != nil {
@@ -41,11 +41,11 @@ func encodeJSON(filePath string, content interface{}) error {
 }
 
 // MIGHT WANNA CHANGE FILE NAME TO FILE PATH, and maybe return a pointer to an interface
-/* Use the json pkg to decode JSON content from file according to the Entry
+/* Use the json pkg to decode JSON content from file according to the Place
    type, which is just a struct of two strings, the dir and its alias. Return
-   the parsed result as an Entry slice. */
-func decodeJSON(fileName string) ([]Entry, error) {
-	var entries []Entry
+   the parsed result as an Place slice. */
+func decodeJSON(fileName string) ([]Place, error) {
+	var entries []Place
 
 	// A json.Decoder requires an io.Reader. Get a *os.File accordingly.
 	file, err := os.Open(fileName)
