@@ -44,6 +44,11 @@ func decodeJSON(fileName string) ([]Place, error) {
 		return nil, err
 	}
 
+	// Return early on empty files.
+	if len(byteBuffer) == 0 {
+		return nil, nil
+	}
+
 	err = json.Unmarshal(byteBuffer, &entries)
 	if err != nil {
 		return nil, err

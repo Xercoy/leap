@@ -41,3 +41,7 @@ func TestGetHomeDir(t *testing.T) {
 		t.Errorf("Error retrieving envar value via os.Getenv().")
 	}
 }
+
+// Parameters for this test has changed. Need to update
+func TestLeap(t *testing.T) {
+}

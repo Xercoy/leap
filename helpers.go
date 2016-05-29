@@ -2,6 +2,18 @@ package leap
 
 import (
 	"os"
+	"path/filepath"
+)
+
+const (
+	cfgFileName = ".leap"
+	cfgFilePath = "./"
+)
+
+var (
+	defaultLeapInfo   *LeapInfo
+	defaultConfigPath = filepath.Join(GetHomeDir(), cfgFileName)
+	DefaultCfgPath    = filepath.Join(GetHomeDir(), cfgFileName)
 )
 
 func openFile(name string) (*os.File, error) {

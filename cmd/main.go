@@ -1,34 +1,35 @@
 package main
 
 import (
-	_ "github.com/xercoy/leap"
-	"log"
+	"fmt"
+	"github.com/xercoy/leap"
 	"os"
 )
 
 func main() {
+	lI := leap.NewLeapInfo(leap.DefaultCfgPath)
 	args := os.Args
-	keyword := args[1]
+	var err error
+
+	if len(args) <= 1 {
+		fmt.Printf("./")
+		return
+	}
 
 	switch {
-	case keyword == "new":
-		if len(args) == 4 {
-			log.Printf("Adding %s as a place with alias %s.\n",
-				args[2], args[3])
-		} else {
-			log.Printf("Error: must provide exactly one new space and alais, separated by a space.")
+	case (len(args) == 2) && (args[1] == "list"):
+		// Write the places to output.
+		fmt.Printf("%v", lI.Places)
+
+	case (len(args) == 4) && (args[1] == "add"):
+		err = lI.AddPlace(args[2], args[3])
+		if err != nil {
+			panic(err)
 		}
 
-	case keyword == "list":
-		log.Printf("Showing all current places and their aliases.")
-
-	case keyword == "rm":
-		if len(args) == 2 {
-			log.Printf("Error: must provide an alias to be deleted.\n")
-		} else if len(args) > 4 {
-			log.Printf("Error: only one alias can be deleted at a time.\n")
-		} else if len(args) == 3 {
-			log.Printf("Attempting to delete place with alias %s.\n", args[2])
-		}
+		//fmt.Printf("%v", lI.Places)
+	default:
+		// Regard args[1] as an alias and attempt to jump.
+		fmt.Printf("%v", lI.Leap(args[1]))
 	}
 }
