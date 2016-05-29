@@ -5,10 +5,10 @@ import (
 	"path/filepath"
 )
 
-func createDefaultLeapConfig() {
+func createDefaultLeapInfo() {
 	log.Print("Pkg init running...")
 
-	if defaultLeapConfig == nil {
+	if defaultLeapInfo == nil {
 		defaultPath, err := filepath.Abs(filepath.Join(GetHomeDir(),
 			cfgFileName))
 
@@ -16,6 +16,6 @@ func createDefaultLeapConfig() {
 			panic(err.Error())
 		}
 
-		defaultLeapConfig = NewLeapConfig(defaultPath)
+		defaultLeapInfo = NewLeapInfo(defaultPath)
 	}
 }

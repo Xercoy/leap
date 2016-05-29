@@ -10,7 +10,7 @@ const (
 )
 
 var (
-	defaultLeapConfig *LeapConfig
+	defaultLeapInfo *LeapInfo
 )
 
 type Place struct {
@@ -19,13 +19,13 @@ type Place struct {
 }
 
 // Struct to hold a pointer to the config file.
-type LeapConfig struct {
+type LeapInfo struct {
 	configPath string
 	Places     []Place
 }
 
-func NewLeapConfig(cfgFullPath string) *LeapConfig {
-	lC := new(LeapConfig)
+func NewLeapInfo(cfgFullPath string) *LeapInfo {
+	lC := new(LeapInfo)
 
 	lC.configPath = cfgFullPath
 
@@ -66,14 +66,9 @@ func NewLeapConfig(cfgFullPath string) *LeapConfig {
 	return lC
 }
 
-func (lC *LeapConfig) readConfigFile() ([]Place, error) {
-	return decodeJSON(lC.configPath)
-}
-
 /* Open the cfg file, add the entry. Might want to check if the dir is valid.
-   Need to somehow have the path of the config file open too. This probably
-   should not be public, or it should be a method. */
-func (lC *LeapConfig) AddPlace(dir string, alias string) error {
+   Need to somehow have the path of the config file open too. */
+func (lC *LeapInfo) AddPlace(dir string, alias string) error {
 
 	// Read the config file and update the object's Places field.
 	placesFromCfg, err := lC.readConfigFile()
@@ -96,18 +91,11 @@ func (lC *LeapConfig) AddPlace(dir string, alias string) error {
 	return nil
 }
 
-// Attempt to write the content stored in defaultLeapConfig to file.
-func (lC *LeapConfig) writeToFile() error {
-	// Truncate the file, write the new file content instead.
-	err := os.Truncate(lC.configPath, 0)
-	if err != nil {
-		return err
-	}
+// Attempt to write the content stored in defaultLeapInfo to file.
+func (lC *LeapInfo) writeToFile() error {
+	return encodeJSON(lC.configPath, lC.Places)
+}
 
-	err = encodeJSON(lC.configPath, lC.Places)
-	if err != nil {
-		return err
-	}
-
-	return nil
+func (lC *LeapInfo) readConfigFile() ([]Place, error) {
+	return decodeJSON(lC.configPath)
 }
