@@ -18,3 +18,8 @@ Leap to somewhere via the alias you created:
 ```
 leap home
 ```
+
+# Notes
+
+The package contains an init function that will attempt to create a hidden file in a User's home directory called `.leap`
+
