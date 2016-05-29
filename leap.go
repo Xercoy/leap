@@ -1,8 +1,6 @@
 package leap
 
 import (
-	"io/ioutil"
-	"log"
 	"os"
 )
 
@@ -23,7 +21,6 @@ type Place struct {
 // Struct to hold a pointer to the config file.
 type LeapConfig struct {
 	File       *os.File
-	content    map[string]string
 	configPath string
 	Places     []Place
 }
@@ -31,7 +28,6 @@ type LeapConfig struct {
 func NewLeapConfig(cfgFullPath string) *LeapConfig {
 	lC := new(LeapConfig)
 
-	lC.content = make(map[string]string)
 	lC.configPath = cfgFullPath
 
 	// Try to get Stats on file. Err if nonexistent.
@@ -100,8 +96,6 @@ func (lC *LeapConfig) AddPlace(dir string, alias string) error {
 	}
 	lC.Places = placesFromCfg
 
-	log.Printf("lC.Places after updating: %v", lC.Places)
-
 	newPlace := Place{dir, alias}
 
 	// Add the new path to the Place slice.
@@ -123,11 +117,6 @@ func (lC *LeapConfig) writeToFile() error {
 	if err != nil {
 		return err
 	}
-
-	file, err := os.Open(lC.configPath)
-	fBytes, err := ioutil.ReadAll(file)
-	file.Close()
-	log.Printf("Contents before encoding: %s", fBytes)
 
 	err = encodeJSON(lC.configPath, lC.Places)
 	if err != nil {

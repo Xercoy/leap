@@ -3,7 +3,6 @@ package leap
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"os"
 )
 
@@ -16,8 +15,6 @@ func encodeJSON(filePath string, content interface{}) error {
 		return err
 	}
 
-	log.Printf("Encode JSON, Writing to file (%v) (content): %v", filePath, content)
-
 	err = os.Truncate(filePath, 0)
 	if err != nil {
 		return err
@@ -29,21 +26,9 @@ func encodeJSON(filePath string, content interface{}) error {
 		return err
 	}
 
-	/*
-		var e []Place
-		byteContent, err := json.Marshal(content)
-		err = json.Unmarshal(byteContent, &e)
-		if err != nil {
-			return err
-		}*/
-
 	return nil
 }
 
-// MIGHT WANNA CHANGE FILE NAME TO FILE PATH, and maybe return a pointer to an interface
-/* Use the json pkg to decode JSON content from file according to the Place
-   type, which is just a struct of two strings, the dir and its alias. Return
-   the parsed result as an Place slice. */
 func decodeJSON(fileName string) ([]Place, error) {
 	var entries []Place
 
@@ -63,8 +48,6 @@ func decodeJSON(fileName string) ([]Place, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	log.Printf("Decode, entries: %v", entries)
 
 	return entries, nil
 }

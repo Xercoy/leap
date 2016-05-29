@@ -1,7 +1,6 @@
 package leap
 
 import (
-	"log"
 	"os"
 	"path/filepath"
 	"testing"
@@ -21,8 +20,6 @@ func TestMain(m *testing.M) {
 }
 
 func TestAddPlace(t *testing.T) {
-	log.Println("Running TestAddPlace...")
-
 	err := defaultLeapConfig.AddPlace("~/Base/workspace", "base")
 	if err != nil {
 		t.Error(err.Error())

@@ -1,15 +1,12 @@
 package leap
 
 import (
-	"log"
 	"reflect"
 	"testing"
 )
 
 // Encode sample data to a file.
 func TestEncodeJSON(t *testing.T) {
-	log.Println("Running TestEncodeJSON...")
-
 	// Prepare testData that the decoded result will be compared to.
 	var testData []Place
 	testData = append(testData, Place{"./", "home"})
@@ -33,8 +30,6 @@ func TestEncodeJSON(t *testing.T) {
 
 // Read a sample JSON file and check the results.
 func TestDecodeJSON(t *testing.T) {
-	log.Print("Running TestDecodeJSON...")
-
 	// Prepare testData that the decoded result will be compared to.
 	var testData []Place
 	testData = append(testData, Place{"./", "home"})
