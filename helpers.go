@@ -12,3 +12,12 @@ func openFile(name string) (*os.File, error) {
 
 	return file, nil
 }
+
+// Execute the unix cmd echo $HOME and return it as a string.
+func GetHomeDir() string {
+	return os.Getenv("HOME")
+}
+
+func GetTempDir() string {
+	return os.TempDir()
+}

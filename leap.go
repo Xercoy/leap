@@ -20,7 +20,6 @@ type Place struct {
 
 // Struct to hold a pointer to the config file.
 type LeapConfig struct {
-	File       *os.File
 	configPath string
 	Places     []Place
 }
@@ -43,16 +42,12 @@ func NewLeapConfig(cfgFullPath string) *LeapConfig {
 			panic(err.Error())
 		}
 
-		lC.File = file
-
 		// Ensures error type describes a nonexistent file and creates it.
 	} else if os.IsNotExist(err) {
 
 		// Create a file with read write access.
 		file, err := os.OpenFile(cfgFullPath, os.O_CREATE|os.O_RDWR, 0755)
 		defer file.Close()
-
-		lC.File = file
 
 		// Panic if there was an error opening the file.
 		if err != nil {
@@ -69,15 +64,6 @@ func NewLeapConfig(cfgFullPath string) *LeapConfig {
 	}
 
 	return lC
-}
-
-// Execute the unix cmd echo $HOME and return it as a string.
-func GetHomeDir() string {
-	return os.Getenv("HOME")
-}
-
-func GetTempDir() string {
-	return os.TempDir()
 }
 
 func (lC *LeapConfig) readConfigFile() ([]Place, error) {
