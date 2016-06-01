@@ -10,9 +10,19 @@ The workaround? Create a bash function that will call the binary and parse the r
 
 Add the bash function to your `.bashrc` or `.zshrc` file. As you can see, it's calling the binary from the workspace.
 ```
-funcion leap() {
-	cd $($GOPATH/bin/leap "$@")
+function leap() {
+    local LEAP
+    LEAP="$GOPATH/bin/leap"
+
+    if [ $# -lt 1 ]; then
+	$LEAP
+    elif [ $1 = "add" ] || [ $1 = "rm" ] || [ $1 = "list" ] || [ $1 = "help" ]; then
+	$LEAP $@
+    else
+        cd $($LEAP "$@")
+    fi
 }
+
 ```
 
 # Usage
@@ -41,6 +51,14 @@ leap home
 
 - The package contains an init function that will attempt to create a hidden file in a User's home directory called `.leap`.
 - Until `TODO` bullet #1 is implemented, there is no erroneous or informational output. Incorrect usage will simply return "./". This is essentially to negate `cd`.
+
+Helpful links:
+http://unix.stackexchange.com/questions/259460/how-can-i-parse-a-multi-line-command-output-in-bash
+http://unix.stackexchange.com/questions/78470/pass-arguments-to-function-exactly-as-is
+http://zsh.sourceforge.net/Intro/intro_4.html
+https://groups.google.com/forum/#!topic/golang-nuts/8o7S3fq5fN8
+http://stackoverflow.com/questions/255414/why-doesnt-cd-work-in-a-bash-shell-script
+http://stackoverflow.com/questions/17026290/golang-chdir-and-stay-there-on-program-termination
 
 # TODO
 
