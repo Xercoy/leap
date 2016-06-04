@@ -60,8 +60,13 @@ https://groups.google.com/forum/#!topic/golang-nuts/8o7S3fq5fN8
 http://stackoverflow.com/questions/255414/why-doesnt-cd-work-in-a-bash-shell-script
 http://stackoverflow.com/questions/17026290/golang-chdir-and-stay-there-on-program-termination
 
+
 # TODO
 
 - Modify the bash function to parse a result. This way we can implement `leap list`, `leap remove`, and print out error messages.
 - Invalidate addition of a Place with a duplicate alias
+
+
+# DONE
+
 - Implement `leap list` which will list all of the places you can leap to.

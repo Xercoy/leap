@@ -23,7 +23,7 @@ Remove a Place           : leap rm   <alias>`
 
 	case (len(args) == 2) && (args[1] == "list"):
 		// Write the places to output.
-		fmt.Printf("%v", lI.Places)
+		fmt.Printf("%s", lI.StrOfPlaces())
 
 	case (len(args) == 4) && (args[1] == "add"):
 		err = lI.AddPlace(args[2], args[3])
