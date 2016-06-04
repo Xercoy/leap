@@ -1,6 +1,8 @@
 package leap
 
 import (
+	"errors"
+	"fmt"
 	"log"
 	"os"
 	//	"os/exec"
@@ -16,6 +18,27 @@ type Place struct {
 type LeapInfo struct {
 	configPath string
 	Places     []Place
+}
+
+func (lI *LeapInfo) StrOfPlaces() string {
+	var strCollection string
+	var formatString = "\n%-10s   %-10s\n"
+	var header = fmt.Sprintf(formatString, "Aliases", "Directories")
+
+	// Display appropriate header if there's only one place.
+	if len(lI.Places) == 1 {
+		header = fmt.Sprintf(formatString, "Alias", "Directory")
+	}
+
+	// Append header
+	strCollection += header
+
+	// Iterate through the slice and append the formatted strings.
+	for _, p := range lI.Places {
+		strCollection += fmt.Sprintf(formatString, p.Alias, p.Directory)
+	}
+
+	return strCollection
 }
 
 func NewLeapInfo(cfgPath string) *LeapInfo {
@@ -65,18 +88,32 @@ func NewLeapInfo(cfgPath string) *LeapInfo {
 	return lC
 }
 
+func (lC *LeapInfo) aliasInUse(testAlias string) bool {
+	for _, p := range lC.Places {
+		if p.Alias == testAlias {
+			return true
+		}
+	}
+
+	return false
+}
+
 /* Open the cfg file, add the entry. Might want to check if the dir is valid.
    Need to somehow have the path of the config file open too. */
 func (lC *LeapInfo) AddPlace(dir string, alias string) error {
-
 	// Read the config file and update the object's Places field.
 	placesFromCfg, err := lC.readConfigFile()
 	if err != nil {
 		log.Printf("AddPlace: Error Reading Config file...")
 		return err
 	}
-
 	lC.Places = placesFromCfg
+
+	if lC.aliasInUse(alias) {
+		errorStr := fmt.Sprintf("Error: Alias (%s) is already in use. Unable to add Place.\n", alias)
+
+		return errors.New(errorStr)
+	}
 
 	newPlace := Place{dir, alias}
 

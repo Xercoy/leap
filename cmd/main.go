@@ -28,7 +28,7 @@ Remove a Place           : leap rm   <alias>`
 	case (len(args) == 4) && (args[1] == "add"):
 		err = lI.AddPlace(args[2], args[3])
 		if err != nil {
-			panic(err)
+			fmt.Printf(err.Error())
 		}
 
 	default:
