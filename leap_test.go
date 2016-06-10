@@ -1,6 +1,7 @@
 package leap
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"testing"
@@ -20,9 +21,17 @@ func TestMain(m *testing.M) {
 }
 
 func TestAddPlace(t *testing.T) {
-	err := defaultLeapInfo.AddPlace("~/Base/workspace", "base")
+	testDir := "foo"
+	testAlias := "bar"
+
+	err := defaultLeapInfo.AddPlace(testDir, testAlias)
 	if err != nil {
 		t.Error(err.Error())
+	}
+
+	resolvedVal, _ := defaultLeapInfo.ResolveAlias(testAlias)
+	if testDir != resolvedVal {
+		t.Error("Newly added Place was not found in config.")
 	}
 }
 
@@ -42,6 +51,27 @@ func TestGetHomeDir(t *testing.T) {
 	}
 }
 
-// Parameters for this test has changed. Need to update
-func TestLeap(t *testing.T) {
+func TestPlaceRemoval(t *testing.T) {
+	testDir := "fizz"
+	testAlias := "buzz"
+
+	err := defaultLeapInfo.AddPlace(testDir, testAlias)
+	if err != nil {
+		t.Error(err.Error())
+	}
+
+	_, err = defaultLeapInfo.ResolveAlias(testAlias)
+	if err != nil {
+		t.Error(errors.New("Newly added Place was not found in config."))
+	}
+
+	err = defaultLeapInfo.RemovePlace(testAlias)
+	if err != nil {
+		t.Error(err.Error())
+	}
+
+	_, err = defaultLeapInfo.ResolveAlias(testAlias)
+	if err == nil {
+		t.Error(errors.New("Removed place still exists in config."))
+	}
 }

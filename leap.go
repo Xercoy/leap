@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	//	"os/exec"
 )
 
 /* A place is a pair of strings: the destination (Directory), and its alias which leap will resolve the destination from. */
@@ -98,18 +97,58 @@ func (lC *LeapInfo) aliasInUse(testAlias string) bool {
 	return false
 }
 
-/* Open the cfg file, add the entry. Might want to check if the dir is valid.
-   Need to somehow have the path of the config file open too. */
-func (lC *LeapInfo) AddPlace(dir string, alias string) error {
+func (lI *LeapInfo) RemovePlace(alias string) error {
+	var err error
+	var rmIndex int = -1
+
+	lI.Places, err = lI.readConfigFile()
+	if err != nil {
+		return err
+	}
+
+	for i, place := range lI.Places {
+		if place.Alias == alias {
+			rmIndex = i
+		}
+	}
+
+	if rmIndex > -1 {
+		lI.Places = append(lI.Places[:rmIndex], lI.Places[rmIndex+1:]...)
+	} else {
+		return errors.New("Removal Error: Place with given alias was not found.")
+	}
+
+	// Write the updated Config file
+	err = lI.writeToConfig()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (lI *LeapInfo) readConfig() error {
 	// Read the config file and update the object's Places field.
-	placesFromCfg, err := lC.readConfigFile()
+	updatedPlaces, err := lI.readConfigFile()
 	if err != nil {
 		log.Printf("AddPlace: Error Reading Config file...")
 		return err
 	}
-	lC.Places = placesFromCfg
 
-	if lC.aliasInUse(alias) {
+	lI.Places = updatedPlaces
+
+	return nil
+}
+
+/* Open the cfg file, add the entry. Might want to check if the dir is valid.
+   Need to somehow have the path of the config file open too. */
+func (lI *LeapInfo) AddPlace(dir string, alias string) error {
+	err := lI.readConfig()
+	if err != nil {
+		return err
+	}
+
+	if lI.aliasInUse(alias) {
 		errorStr := fmt.Sprintf("Error: Alias (%s) is already in use. Unable to add Place.\n", alias)
 
 		return errors.New(errorStr)
@@ -118,10 +157,10 @@ func (lC *LeapInfo) AddPlace(dir string, alias string) error {
 	newPlace := Place{dir, alias}
 
 	// Add the new path to the Place slice.
-	lC.Places = append(lC.Places, newPlace)
+	lI.Places = append(lI.Places, newPlace)
 
 	// Write the updated Config file
-	err = lC.writeToConfig()
+	err = lI.writeToConfig()
 	if err != nil {
 		return err
 	}
@@ -143,20 +182,22 @@ func (lC *LeapInfo) Leap(alias string) string {
 	// Default value is a dot, so cd . won't do anything.
 	resolvedDir := "."
 
-	resolvedDir = lC.resolveAlias(alias)
+	resolvedDir, _ = lC.ResolveAlias(alias)
 
 	return resolvedDir
 }
 
 // Return full directory
-func (lC *LeapInfo) resolveAlias(alias string) string {
+func (lC *LeapInfo) ResolveAlias(alias string) (string, error) {
 	lC.readConfigFile()
+
+	unresolvedErr := errors.New("Could not resolve alias.")
 
 	for _, p := range lC.Places {
 		if p.Alias == alias {
-			return p.Directory
+			return p.Directory, nil
 		}
 	}
 
-	return "."
+	return ".", unresolvedErr
 }

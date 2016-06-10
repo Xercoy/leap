@@ -62,11 +62,13 @@ http://stackoverflow.com/questions/17026290/golang-chdir-and-stay-there-on-progr
 
 
 # TODO
+- Remove '.' from being output on errors. The bash func originally used program output as the argument to `cd`. Outputting `.` on errors prevented it from jumping or printing out errors.
 
+# IN PROGRESS
+- Implement 'rm' command to remove aliases.
 - Modify the bash function to parse a result. This way we can implement `leap list`, `leap remove`, and print out error messages.
-- Invalidate addition of a Place with a duplicate alias
-
 
 # DONE
 
 - Implement `leap list` which will list all of the places you can leap to.
+- Invalidate addition of a Place with a duplicate alias

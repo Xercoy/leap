@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/xercoy/leap"
+	"log"
 	"os"
 )
 
@@ -21,6 +22,16 @@ Remove a Place           : leap rm   <alias>`
 	case ((len(args) == 2) && (args[1] == "help")) || (len(args) == 1):
 		fmt.Println(helpText)
 
+	case ((len(args) == 3) && (args[1] == "rm")):
+
+		err = lI.RemovePlace(args[2])
+		if err != nil {
+			fmt.Printf(err.Error())
+			break
+		}
+
+		log.Printf("Place with alias %s has successfully been removed.", args[2])
+
 	case (len(args) == 2) && (args[1] == "list"):
 		// Write the places to output.
 		fmt.Printf("%s", lI.StrOfPlaces())
@@ -29,7 +40,10 @@ Remove a Place           : leap rm   <alias>`
 		err = lI.AddPlace(args[2], args[3])
 		if err != nil {
 			fmt.Printf(err.Error())
+			break
 		}
+
+		log.Printf("Place with alias %s has successfully been added.", args[3])
 
 	default:
 		// Regard args[1] as an alias and attempt to jump.
