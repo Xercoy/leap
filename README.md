@@ -8,21 +8,22 @@ The workaround? Create a bash function that will call the binary and parse the r
 
 # Installation
 
-Add the bash function to your `.bashrc` or `.zshrc` file. As you can see, it's calling the binary from the workspace.
+Copy the most recent binary (cmd/leap) to the appropriate bath. In the usual case, this would be `$GOPATH/bin/`
+
+Add the bash function (file named bash_func) to your `.bashrc` or `.zshrc` file. As you can see, it's calling the binary from the workspace. Modify the path as you see fit.
 ```
 function leap() {
-    local LEAP
-    LEAP="$GOPATH/bin/leap"
+    local leap_bin_path
+    leap_bin_path="$GOPATH/bin/leap"
 
     if [ $# -lt 1 ]; then
 	$LEAP
-    elif [ $1 = "add" ] || [ $1 = "rm" ] || [ $1 = "list" ] || [ $1 = "help" ]; then
+    elif [ $1 = "add" ] || [ $1 = "rm" ] || [ $1 = "list" ] || [ $1 = "help" ] || [ $1 = "rm" ]; then
 	$LEAP $@
     else
         cd $($LEAP "$@")
     fi
 }
-
 ```
 
 # Usage
@@ -63,6 +64,11 @@ http://stackoverflow.com/questions/17026290/golang-chdir-and-stay-there-on-progr
 
 # TODO
 - Remove '.' from being output on errors. The bash func originally used program output as the argument to `cd`. Outputting `.` on errors prevented it from jumping or printing out errors.
+- Make bash_func simpler.
+
+# Enhancements
+- Allow main to check for a custom config file path.
+- Allow bash func to check for a custom config file path.
 
 # IN PROGRESS
 - Modify the bash function to parse a result. This way we can implement `leap list`, `leap remove`, and print out error messages.
