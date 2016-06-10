@@ -178,13 +178,16 @@ func (lC *LeapInfo) readConfigFile() ([]Place, error) {
 }
 
 /* In our case, by leaping, we simply return to stdout the destination that the givenalias resolves to. */
-func (lC *LeapInfo) Leap(alias string) string {
+func (lC *LeapInfo) Leap(alias string) (string, error) {
 	// Default value is a dot, so cd . won't do anything.
-	resolvedDir := "."
+	var resolvedDir string
 
-	resolvedDir, _ = lC.ResolveAlias(alias)
+	resolvedDir, err := lC.ResolveAlias(alias)
+	if err != nil {
+		return "", err
+	}
 
-	return resolvedDir
+	return resolvedDir, nil
 }
 
 // Return full directory
@@ -199,5 +202,5 @@ func (lC *LeapInfo) ResolveAlias(alias string) (string, error) {
 		}
 	}
 
-	return ".", unresolvedErr
+	return "", unresolvedErr
 }

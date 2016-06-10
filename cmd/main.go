@@ -47,6 +47,12 @@ Remove a Place           : leap rm   <alias>`
 
 	default:
 		// Regard args[1] as an alias and attempt to jump.
-		fmt.Printf("%v", lI.Leap(args[1]))
+		leapDest, err := lI.Leap(args[1])
+
+		if err != nil {
+			fmt.Printf("./")
+		} else {
+			fmt.Printf("%s", leapDest)
+		}
 	}
 }
