@@ -1,15 +1,12 @@
 function leap() {
-    local LEAP
-    LEAP="$GOPATH/bin/leap"
- 
+    local leap_bin_path
+    leap_bin_path="$GOPATH/bin/leap"
+
     if [ $# -lt 1 ]; then
-	echo "1"
 	$LEAP
     elif [ $1 = "add" ] || [ $1 = "rm" ] || [ $1 = "list" ] || [ $1 = "help" ] || [ $1 = "rm" ]; then
-	echo "2"
 	$LEAP $@
     else
-	echo "3"
         cd $($LEAP "$@")
     fi
 }
