@@ -13,17 +13,28 @@ Copy the most recent binary (cmd/leap) to the appropriate bath. In the usual cas
 Add the bash function (file named bash_func) to your `.bashrc` or `.zshrc` file. As you can see, it's calling the binary from the workspace. Modify the path as you see fit.
 ```
 function leap() {
-    local leap_bin_path
-    leap_bin_path="$GOPATH/bin/leap"
+    local LEAP
+    LEAP="$GOPATH/bin/leap"
 
     if [ $# -lt 1 ]; then
+
 	$LEAP
-    elif [ $1 = "add" ] || [ $1 = "rm" ] || [ $1 = "list" ] || [ $1 = "help" ] || [ $1 = "rm" ]; then
+    elif ([ "$1" = "add" ]) || \
+	     ([ "$1" = "rm" ]) || \
+	     ([ "$1" = "list" ]) || \
+	     ([ "$1" = "help" ]) || \
+	     ([ "$1" = "rm" ]); then
+
 	$LEAP $@
     else
-        cd $($LEAP "$@")
+
+	local dest
+	dest=$($LEAP "$@")
+
+        cd "$dest"
     fi
 }
+
 ```
 
 # Usage
